@@ -3,7 +3,7 @@ const faker = require('faker');
 
 const router = express.Router();
 
-router.get('/products', (req, res) => {
+router.get('/', (req, res) => {
   const products = [];
   const { size } = req.query;
   const limit = size || 10;
@@ -17,17 +17,50 @@ router.get('/products', (req, res) => {
   res.json(products);
 });
 
-router.get('/products/filter', (req, res) => {
+router.get('/filter', (req, res) => {
   res.send('yo soy un filter');
 });
 
-router.get('/products/:id', (req, res) => {
+router.get('/:id', (req, res) => {
   const { id } = req.params;
-  res.json({
-    id,
-    name: 'Product One',
-    price: 1000,
+  if (id === '999') {
+    res.status(404).json({
+      message: 'not Found',
+    });
+  } else {
+    res.status(200).json({
+      id,
+      name: 'Product One',
+      price: 1000,
+    });
+  }
+});
+
+router.post('/', (req, res) => {
+  const body = req.body;
+  res.status(201).json({
+    message: 'created',
+    data: body,
   });
 });
+
+router.patch('/:id', (req, res) => {
+  const { id } = req.params;
+  const body = req.body;
+  res.json({
+    message: 'update',
+    data: body,
+    id,
+  });
+});
+
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  res.json({
+    message: 'deleted',
+    id,
+  });
+});
+
 
 module.exports = router;
